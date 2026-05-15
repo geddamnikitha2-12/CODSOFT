@@ -11,53 +11,47 @@ data = pd.read_csv("Titanic-Dataset.csv")
 # Select important columns
 data = data[['Survived', 'Pclass', 'Sex', 'Age', 'Fare']]
 
-# Convert male/female into numbers
-data['Sex'] = data['Sex'].map({
-    'male': 0,
-    'female': 1
-})
+# Convert gender to numbers
+data['Sex'] = data['Sex'].map({'male': 0, 'female': 1})
 
-# Fill missing Age values
+# Fill missing values
 data['Age'].fillna(data['Age'].mean(), inplace=True)
 
-# DATA VISUALIZATION
-
-# Survival count graph
+# -------------------- GRAPH 1 --------------------
 sns.countplot(x='Survived', data=data)
 plt.title("Survival Count")
+plt.savefig("survival_count.png")
 plt.show()
+plt.clf()
 
-# Passenger class graph
+# -------------------- GRAPH 2 --------------------
 sns.countplot(x='Pclass', data=data)
 plt.title("Passenger Class Count")
+plt.savefig("pclass_count.png")
 plt.show()
+plt.clf()
 
-# Age distribution graph
+# -------------------- GRAPH 3 --------------------
 sns.histplot(data['Age'], bins=30)
 plt.title("Age Distribution")
+plt.savefig("age_distribution.png")
 plt.show()
+plt.clf()
 
-# MACHINE LEARNING
-
-# Define input and output
+# -------------------- MACHINE LEARNING --------------------
 X = data[['Pclass', 'Sex', 'Age', 'Fare']]
 y = data['Survived']
 
-# Split dataset
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Create model
-model = LogisticRegression()
+model = LogisticRegression(max_iter=200)
 
-# Train model
 model.fit(X_train, y_train)
 
-# Prediction
 y_pred = model.predict(X_test)
 
-# Accuracy
 accuracy = accuracy_score(y_test, y_pred)
 
 print("\nMODEL ACCURACY:")
